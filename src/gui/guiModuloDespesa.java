@@ -45,7 +45,7 @@ public class guiModuloDespesa extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblCategoria = new JLabel("Categoria");
-		lblCategoria.setBounds(278, 0, 60, 17);
+		lblCategoria.setBounds(278, 7, 60, 17);
 		contentPane.add(lblCategoria);
 		
 		JButton btnCadatrar = new JButton("Cadastrar");
@@ -65,7 +65,7 @@ public class guiModuloDespesa extends JFrame {
 		contentPane.add(separator);
 		
 		JLabel lblDespesa = new JLabel("Despesa");
-		lblDespesa.setBounds(278, 89, 60, 17);
+		lblDespesa.setBounds(278, 99, 60, 17);
 		contentPane.add(lblDespesa);
 		
 		JButton btnCadatrar_1 = new JButton("Cadastrar");
