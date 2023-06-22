@@ -18,6 +18,8 @@ import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import service.Categoria;
 import service.Rendimento;
@@ -54,7 +56,7 @@ public class guiModuloRendimento extends JFrame {
 	public guiModuloRendimento() throws SQLException, IOException {
 		setTitle("Modulo de Rendimento");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
 		getContentPane().setLayout(null);
 		
@@ -71,6 +73,7 @@ public class guiModuloRendimento extends JFrame {
 		List<Rendimento> rendimentos = this.rendimento.buscarTodos();
 		for(Rendimento rendimentou : rendimentos) {
 			modelo.addRow(new Object[] {
+					rendimentou.getId(),
 					rendimentou.getCategoria().getNome(),
 					rendimentou.getRendimento(),
 					rendimentou.getMensal(),
@@ -152,6 +155,15 @@ public class guiModuloRendimento extends JFrame {
 		getContentPane().add(btnEditarRendimento);
 		
 		btnExcluirRendimento = new JButton("Excluir");
+		btnExcluirRendimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					btnExcluirRendimento();
+				} catch (NumberFormatException | SQLException | IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnExcluirRendimento.setBounds(393, 140, 105, 27);
 		getContentPane().add(btnExcluirRendimento);
 		
@@ -169,10 +181,15 @@ public class guiModuloRendimento extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Categoria", "Rendimento", "Mensal", "Ocasional", "Total Ano"
+				"Id", "Categoria", "Rendimento", "Mensal", "Ocasional", "Total Ano"
 			}
 		));
-		
+		 TableColumnModel columnModel = table.getColumnModel();
+	     TableColumn column = columnModel.getColumn(0);
+	     column.setMinWidth(0);
+	     column.setMaxWidth(0);
+	     column.setWidth(0);
+	     column.setPreferredWidth(0);
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
                 if (table.getSelectedRow() != -1) {
@@ -191,6 +208,7 @@ public class guiModuloRendimento extends JFrame {
 			JOptionPane.showMessageDialog(null, "Cadastro não realizado","Cadastro de categoria", JOptionPane.ERROR_MESSAGE);
 		
 	}
+	
 	private void btnExcluirCategoria() throws HeadlessException, SQLException, IOException {
 		String nome = JOptionPane.showInputDialog(null, "Nome da categoria", "Entrada de dados",JOptionPane.QUESTION_MESSAGE);
 		if(new Categoria(nome.toUpperCase()).excluirCategoria())
@@ -205,16 +223,26 @@ public class guiModuloRendimento extends JFrame {
 		double mensal = Double.parseDouble(JOptionPane.showInputDialog(null, "Valor Mensal", "Entrada de dados",JOptionPane.QUESTION_MESSAGE));
 		double ocasional = Double.parseDouble(JOptionPane.showInputDialog(null, "Valor Ocasional", "Entrada de dados",JOptionPane.QUESTION_MESSAGE));
 		new Rendimento(nome, nomeRende, mensal,ocasional).cadastrarRendimento();
+		buscarRendimento();
 		
 	}
 	private void btnEditarRendimento() throws NumberFormatException, SQLException, IOException {
 		final int getLinha = table.getSelectedRow();
 		new Rendimento(
-				new Categoria(table.getValueAt(getLinha, 0).toString()),
-				table.getValueAt(getLinha, 1).toString(),
-				Double.parseDouble(table.getValueAt(getLinha, 2).toString()),
-				Double.parseDouble(table.getValueAt(getLinha, 3).toString())
-				).editarRendimento(getLinha+1);
-		
+				new Categoria(table.getValueAt(getLinha, 1).toString()),
+				table.getValueAt(getLinha, 2).toString(),
+				Double.parseDouble(table.getValueAt(getLinha, 3).toString()),
+				Double.parseDouble(table.getValueAt(getLinha, 4).toString())
+				).editarRendimento(Integer.parseInt(table.getValueAt(getLinha, 0).toString()));
+		buscarRendimento();
+	}
+	private void btnExcluirRendimento() throws NumberFormatException, SQLException, IOException {
+		final int getLinha = table.getSelectedRow();
+		if(new Rendimento().excluirRendimento(Integer.parseInt(table.getValueAt(getLinha, 0).toString())))
+			JOptionPane.showMessageDialog(null, "Exclusão realizada com sucesso","Exclusão de Rendimento", JOptionPane.INFORMATION_MESSAGE);
+		else 
+			JOptionPane.showMessageDialog(null, "Exclusão não realizada","Exclusão de Rendimento", JOptionPane.ERROR_MESSAGE);
+			
+		buscarRendimento();
 	}
 }

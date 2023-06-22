@@ -59,7 +59,7 @@ public class FundoOcasionalDAO {
 		iniciarBD();
 		PreparedStatement st = null;
 		try {
-			st= conn.prepareStatement("delete from despesaocsional where id = ?");
+			st= conn.prepareStatement("delete from despesaocasional where id = ?");
 			st.setInt(1, id);
 			if(st.executeUpdate()<=0) controle = false;
 		}finally {

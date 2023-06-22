@@ -19,7 +19,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import service.FundoOcasional;
-import service.Investimento;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -59,7 +58,7 @@ public class guiFundoOcasional extends JFrame {
 	 */
 	public guiFundoOcasional() throws SQLException, IOException {
 		setTitle("Fundo Ocasional ");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -187,7 +186,7 @@ public class guiFundoOcasional extends JFrame {
 	}
 	private void btnExcluirFundoOcasional() throws NumberFormatException, SQLException, IOException {
 		final int getLinha = table.getSelectedRow();
-		if(new Investimento().excluirInvestimento(Integer.parseInt(table.getValueAt(getLinha, 0).toString())))
+		if(new FundoOcasional().excluirOcasional(Integer.parseInt(table.getValueAt(getLinha, 0).toString())))
 			JOptionPane.showMessageDialog(null, "Exclusão realizada com sucesso","Exclusão de fundo", JOptionPane.INFORMATION_MESSAGE);
 		else 
 			JOptionPane.showMessageDialog(null, "Exclusão não realizada","Exclusão de fundo", JOptionPane.ERROR_MESSAGE);

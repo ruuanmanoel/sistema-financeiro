@@ -14,7 +14,7 @@ import service.Rendimento;
 
 public class RendimentoDAO {
 	private Connection conn;
-	private boolean controle;
+	private boolean controle = true;
 
 	private  void iniciarBD() throws SQLException, IOException {
 		conn = BancoDados.conectar();
@@ -50,13 +50,14 @@ public class RendimentoDAO {
 
 		try {
 			
-			st = conn.prepareStatement("UPDATE rendimento SET categoria = ?, nome = ?, mensal = ?, ocasional = ? WHERE id = ?");
+			st = conn.prepareStatement("UPDATE rendimento SET categoria = ?, nome = ?, mensal = ?, ocasional = ?, totalano = ? WHERE id = ?");
 
 			st.setString(1, rendimento.getCategoria().getNome());
 			st.setString(2, rendimento.getRendimento());
 			st.setDouble(3, rendimento.getMensal());
 			st.setDouble(4, rendimento.getOcasional());
-			st.setInt(5, id);
+			st.setDouble(5, rendimento.getTotalAno());
+			st.setInt(6, id);
 
 			if(st.executeUpdate()<=0) controle = false;
 
@@ -67,6 +68,21 @@ public class RendimentoDAO {
 		}
 		return controle;
 	}
+	
+	public boolean excluirRendimento(Rendimento rendimento, int id) throws SQLException, IOException {
+		iniciarBD();
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("delete from rendimento where id = ?");
+			st.setInt(1, id);
+			if(st.executeUpdate()<=0) controle = false;
+		}finally {
+			BancoDados.finalizarStatement(st);
+			BancoDados.desconectar();
+		}
+		return controle;
+	}
+	
 	public List<Rendimento> buscarTodos() throws SQLException, IOException{
 		conn = BancoDados.conectar();
 		PreparedStatement st = null;
@@ -78,6 +94,7 @@ public class RendimentoDAO {
 			List<Rendimento> listaRendimento = new ArrayList<>();
 			while(rs.next()) {
 				Rendimento rendimento = new Rendimento();
+				rendimento.setId(rs.getInt("id"));
 				rendimento.setCategoria(new Categoria(rs.getString("categoria")));
 				rendimento.setRendimento(rs.getString("nome"));
 				rendimento.setMensal(rs.getDouble("mensal"));

@@ -24,7 +24,6 @@ public class InvestimentoDAO {
 		try {
 
 			st = conn.prepareStatement("insert into investimento (nome, mensal, ocasional, totalano) values ( ?, ?, ?, ?)");
-
 			st.setString(1, investimento.getInvestimento());
 			st.setDouble(2, investimento.getMensal());
 			st.setDouble(3, investimento.getOcasional());
@@ -33,12 +32,10 @@ public class InvestimentoDAO {
 			if(st.executeUpdate()<=0) controle = false;
 
 		} finally {
-
 			BancoDados.finalizarStatement(st);
 			BancoDados.desconectar();
 		}
 		return controle;
-		
 	}
 	public boolean editarInvestimento(Investimento investimento, int id) throws SQLException, IOException {
 		iniciarBD();

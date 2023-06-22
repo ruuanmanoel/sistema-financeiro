@@ -64,7 +64,7 @@ public class guiModuloDespesa extends JFrame {
 	 */
 	public guiModuloDespesa() throws SQLException, IOException {
 		setTitle("Modulo de Despesa");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 640, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

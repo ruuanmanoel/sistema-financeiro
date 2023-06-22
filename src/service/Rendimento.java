@@ -10,6 +10,7 @@ public class Rendimento {
 	private Categoria categoria;
 	private RendimentoDAO rendimentoDAO;
 	private String rendimento;
+	private int id;
 	private double mensal;
 	private double ocasional;
 	private double totalAno;
@@ -38,6 +39,9 @@ public class Rendimento {
 	}
 	public boolean editarRendimento(int id) throws SQLException, IOException {
 		return new RendimentoDAO().editarRendimento(this, id);
+	}
+	public boolean excluirRendimento(int id) throws SQLException, IOException {
+		return new RendimentoDAO().excluirRendimento(this, id);
 	}
 	public Categoria getCategoria() {
 		return categoria;
@@ -68,6 +72,12 @@ public class Rendimento {
 	}
 	public void setTotalAno(double totalAno) {
 		this.totalAno = totalAno;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	
